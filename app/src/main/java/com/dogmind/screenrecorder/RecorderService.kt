@@ -39,7 +39,11 @@ class RecorderService : Service() {
     private var virtualDisplay: VirtualDisplay? = null
     private var currentFile: File? = null
     private val handler = Handler(Looper.getMainLooper())
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+    .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+    .writeTimeout(120, java.util.concurrent.TimeUnit.SECONDS)
+    .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+    .build()
 
     override fun onBind(intent: Intent?): IBinder? = null
 
