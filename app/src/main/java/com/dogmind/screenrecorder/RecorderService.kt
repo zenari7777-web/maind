@@ -128,24 +128,32 @@ class RecorderService : Service() {
         scheduleNext()
     }
 
-    private fun sendToTelegram(file: File) {
-        try {
-            val body = MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("chat_id", CHAT_ID)
-                .addFormDataPart("video", file.name, file.asRequestBody("video/mp4".toMediaTypeOrNull()))
-                .build()
+   private fun sendToTelegram(file: File) {
+    try {
+        val body = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("chat_id", CHAT_ID)
+            .addFormDataPart("video", file.name, file.asRequestBody("video/mp4".toMediaTypeOrNull()))
+            .build()
 
-            val request = Request.Builder()
-                .url("https://api.telegram.org/bot$TOKEN/sendVideo")
-                .post(body)
-                .build()
+        val request = Request.Builder()
+            .url("https://api.telegram.org/bot$TOKEN/sendVideo")
+            .post(body)
+            .build()
 
-            client.newCall(request).execute().use { response ->
-                if (response.isSuccessful) file.delete()
+        client.newCall(request).execute().use { response ->
+            val responseText = response.body?.string()
+            if (response.isSuccessful) {
+                android.util.Log.d("RecorderService", "done!")
+                file.delete()
+            } else {
+                android.util.Log.e("RecorderService", "sos Telegram-in: $responseText")
             }
-        } catch (e: Exception) { }
+        }
+    } catch (e: Exception) {
+        android.util.Log.e("RecorderService", "lose: ${e.message}")
     }
+}
 
     private fun buildNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
